@@ -1,0 +1,5 @@
+let
+    SCALE = 2
+    WIDTH = 320 * SCALE
+    HEIGHT = 200 * SCALE
+    FONT_SIZE = 12 * SCALE
