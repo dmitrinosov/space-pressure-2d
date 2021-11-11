@@ -12,6 +12,7 @@ require game_phys
 require game_play
 require game_gun
 require game_projectile
+require game_enemy
 require game_draw
 
 options debugger

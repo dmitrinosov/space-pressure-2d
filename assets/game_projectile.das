@@ -6,6 +6,7 @@ require game_config
 require game_var
 require game_templates
 require game_assets
+require game_utils
 
 
 def create_projectile(projectile_type: ProjectileType;
@@ -55,12 +56,6 @@ def projectile_borders_es(eid: EntityId;
         delete_entity(eid)
 
 
-def check_overlap(min1: float2;
-                  max1: float2;
-                  min2: float2;
-                  max2: float2)
-    return !((max2.x <= min1.x) || (min2.x >= max1.x) || (max2.y <= min1.y) || (min2.y >= max1.y))
-
 [decs (stage=update_projectile)]
 def projectile_damage_es(eid: EntityId;
                          projectile: Projectile;
@@ -81,15 +76,13 @@ def projectile_damage_es(eid: EntityId;
         if player_idx == projectilePlayerIndex
             return
 
-        if check_overlap(projectilePos - projectileSize * 0.5,
-                         projectilePos + projectileSize * 0.5,
-                         pos - size * 0.5,
-                         pos + size * 0.5)
+        if check_obj_overlap(projectilePos,
+                             projectileSize,
+                             pos,
+                             size)
             enemyEid = eid
             return
 
     if enemyEid != INVALID_ENTITY_ID
-        query(enemyEid) <| $(eid: EntityId;
-                         var damage_fx_timer: float)
-            damage_fx_timer += 0.1
+        do_damage(enemyEid, damage, projectilePlayerIndex)
         delete_entity(eid)

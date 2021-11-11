@@ -8,6 +8,8 @@ require game_templates
 require game_input
 require game_phys
 require game_assets
+require game_utils
+require game_enemy
 
 
 def game_start()
@@ -44,7 +46,7 @@ def game_start()
         apply_decs_template(
             cmp,
              [[Gun
-                cooldown_time=0.5,
+                cooldown_time=PLAYER_COOLDOWN,
                 projectile_type=PLAYER_START_PROJECTILE_TYPE]])
 
     // Player Bottom Gun
@@ -59,30 +61,19 @@ def game_start()
         apply_decs_template(
             cmp,
              [[Gun
-                cooldown_time=0.5,
+                cooldown_time=PLAYER_COOLDOWN,
                 projectile_type=PLAYER_START_PROJECTILE_TYPE]])
 
     // Asteroid
-    let asteroidPos = float2(float(WINDOW_WIDTH) * 0.7, float(WINDOW_HEIGHT) * 0.3)
-    create_entity <| @(eid, cmp)
-        cmp |> set("pos", asteroidPos)
-        cmp |> set("size", float2(25.0, 25.0) * float(SCALE))
-        cmp |> set("speed", 0.0)
-        cmp |> set("move_dir", float2())
-        cmp |> set("sprite_idx", get_sprite_idx("Asteroid00"))
-        cmp |> set("image_angle", 0.0)
-        cmp |> set("image_rotate_speed", -0.75)
-        cmp |> set("player_idx", ENEMY_INDEX)
-        cmp |> set("health", 100.0)
-        cmp |> set("test", 1)
-        // cmp |> set("damage_fx_timer", 0.0)
-        apply_decs_template(cmp, [[PlayerInput]])
-        apply_decs_template(
-            cmp,
-             [[PhysObj
-                damping=PLAYER_DAMPING,
-                pos=asteroidPos,
-                prev_pos=asteroidPos]])
+    create_enemy(EnemyType AsteroidSmall00, float2(float(WINDOW_WIDTH) * 0.7, float(WINDOW_HEIGHT) * 0.3))
+    create_enemy(EnemyType AsteroidBig00, float2(float(WINDOW_WIDTH) * 0.8, float(WINDOW_HEIGHT) * 0.4))
+    create_enemy(EnemyType AsteroidMedium00, float2(float(WINDOW_WIDTH) * 0.5, float(WINDOW_HEIGHT) * 0.5))
+    create_enemy(EnemyType AsteroidSmall00, float2(float(WINDOW_WIDTH) * 0.6, float(WINDOW_HEIGHT) * 0.6))
+
+    create_enemy(EnemyType AsteroidSmall00, float2(float(WINDOW_WIDTH) * 1.2, float(WINDOW_HEIGHT) * 0.3))
+    create_enemy(EnemyType AsteroidBig00, float2(float(WINDOW_WIDTH) * 1.3, float(WINDOW_HEIGHT) * 0.4))
+    create_enemy(EnemyType AsteroidMedium00, float2(float(WINDOW_WIDTH) * 1.4, float(WINDOW_HEIGHT) * 0.5))
+    create_enemy(EnemyType AsteroidSmall00, float2(float(WINDOW_WIDTH) * 1.5, float(WINDOW_HEIGHT) * 0.6))
 
     return
 
@@ -111,6 +102,40 @@ def player_game_bounds_es(var phys: PhysObj;
         phys.velocity.y = 0.0
 
 
+[decs (stage=update)]
+def player_enemy_collision_es(eid: EntityId;
+                              pos: float2;
+                              size: float2;
+                              player_idx: int;
+                              input: PlayerInput;
+                          var phys: PhysObj)
+    let playerPos = pos
+    let playerSize = size
+    let playerIdx = player_idx
+
+    var enemyEid = INVALID_ENTITY_ID
+    var enemyPos = float2()
+    query() <| $(eid: EntityId;
+                 pos: float2;
+                 size: float2;
+                 phys: PhysObj;
+                 player_idx: int)
+        if player_idx == playerIdx
+            return
+
+        if check_obj_overlap(playerPos, playerSize,
+                             pos, size)
+            enemyEid = eid
+            enemyPos = pos
+
+    if enemyEid != INVALID_ENTITY_ID
+        let toPlayer = playerPos - enemyPos
+        normalize(toPlayer)
+        phys.velocity += toPlayer * 5.0
+
+        do_damage(eid, PLAYER_COLLISION_DAMAGE, ENEMY_INDEX)
+
+
 [decs (stage=phys_pre_update)]
 def input_force_es(move_dir: float2;
                    speed: float;
@@ -126,3 +151,9 @@ def update_attached_es(attached_to: EntityId;
     query(attached_to) <| $(pos: float2)
         ownerPos = pos
     pos = ownerPos + local_pos
+
+
+[decs (stage=update_play)]
+def update_damage_fx_timer_es(var damage_fx_timer: float)
+    if damage_fx_timer > 0.0
+        damage_fx_timer -= game_vars.dt

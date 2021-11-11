@@ -13,7 +13,15 @@ def gun_fire_es(var gun: Gun;
                 pos: float2;
                 dir: float2;
                 player_idx: int;
-                damage: float)
+                damage: float;
+                attached_to: EntityId)
+    var isOwnerAlive = false
+    query(attached_to) <| $(health: float)
+        isOwnerAlive = health > 0.0
+
+    if !isOwnerAlive
+        return
+
     let dt = game_vars.dt
     if gun.cooldown_timer > 0.0
         gun.cooldown_timer -= dt

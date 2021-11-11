@@ -39,8 +39,14 @@ def load_damage_image(path: string)
         for x in range(img.width)
             let p = img |> get_pixel(x, y)
             let a = (p >> 24u) & 0xFFU
+            let b = (p >> 0u) & 0xFFU
+            let g = (p >> 8u) & 0xFFU
+            let r = (p >> 16u) & 0xFFU
             img |> set_pixel(x, y,
-                make_color(1.0, 1.0, 1.0, float(a)))
+                make_color((float(r)/255.0) + 0.5,
+                           (float(g)/255.0) + 0.5,
+                           (float(b)/255.0) + 0.5,
+                           (float(a)/255.0)))
     g_images |> emplace(img)
     return length(g_images) - 1
 
