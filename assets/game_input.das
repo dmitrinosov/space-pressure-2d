@@ -16,9 +16,8 @@ def input_player_es(var input: PlayerInput)
 
 
 [decs (stage=input)]
-def input_force_es(input: PlayerInput;
-                   speed: float;
-               var phys: PhysObj)
+def move_dir_es(input: PlayerInput;
+            var move_dir: float2)
     var dir = float2()
 
     if input.up
@@ -32,4 +31,4 @@ def input_force_es(input: PlayerInput;
 
     normalize(dir)
 
-    phys.force = dir * speed
+    move_dir = dir

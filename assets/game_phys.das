@@ -18,6 +18,8 @@ var phys_world: PhysWorld = [[PhysWorld fixed_dt=PHYS_FIXED_DT]]
 
 
 def update_phys_world(dt: float)
+    decs_stage("phys_pre_update")
+
     phys_world.acc += dt
     phys_world.steps = floori(phys_world.acc / phys_world.fixed_dt)
     if phys_world.steps > 0
@@ -28,11 +30,9 @@ def update_phys_world(dt: float)
 
     for i in range(phys_world.steps)
         decs_stage("phys_update")
-    decs_stage("phys_post_update")
 
-// [decs (on_appear)]
-// def on_appear_phys_es(var phys: PhysObj)
-//    phys.prev_pos = phys.pos
+    decs_stage("phys_post_update_play")
+    decs_stage("phys_post_update")
 
 
 [decs (stage=phys_update)]
@@ -46,11 +46,11 @@ def phys_fixed_update_es(var phys: PhysObj)
 
 
 [decs (stage=update)]
-def phys_update_es(var phys: PhysObj)
+def phys_finish_update_es(var phys: PhysObj)
     phys.force = float2()
 
 
-[decs (stage=update)]
+[decs (stage=phys_post_update)]
 def phys_interpolation_es(phys: PhysObj;
                       var pos: float2&)
     pos = lerp(phys.prev_pos, phys.pos, phys_world.acc_ratio)

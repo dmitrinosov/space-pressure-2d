@@ -7,7 +7,8 @@ require random
 struct GameVars
     rand_seed: int4
     dt: float
-    dbg: int
+    time: float
+    dbg: float
 
 
 var game_vars: GameVars

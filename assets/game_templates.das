@@ -3,6 +3,9 @@ require daslib/decs
 require daslib/decs_boost
 
 
+require game_config
+
+
 [decs_template]
 struct PlayerInput
     up: bool
@@ -21,6 +24,12 @@ struct PhysObj
 
 
 [decs_template]
+struct Projectile
+    tag: int
+
+
+[decs_template]
 struct Gun
     cooldown_time: float
     cooldown_timer: float
+    projectile_type: ProjectileType
