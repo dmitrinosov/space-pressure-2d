@@ -40,6 +40,7 @@ def initialize
 def act(var dt: float)
     game_vars.dt = dt
     game_vars.time += dt
+    game_vars.dbg = 0.0
 
     decs_stage("input")
     update_phys_world(dt)

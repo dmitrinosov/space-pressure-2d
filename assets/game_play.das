@@ -19,8 +19,11 @@ def game_start()
         cmp |> set("size", PLAYER_SIZE)
         cmp |> set("speed", PLAYER_SPEED)
         cmp |> set("move_dir", float2())
-        cmp |> set("image_idx", get_image_idx("textures/Player00.png"))
+        cmp |> set("sprite_idx", get_sprite_idx("Player00"))
         cmp |> set("image_angle", 0.0)
+        cmp |> set("player_idx", PLAYER_INDEX)
+        cmp |> set("health", PLAYER_HEALTH)
+        cmp |> set("damage_fx_timer", 0.0)
         apply_decs_template(cmp, [[PlayerInput]])
         apply_decs_template(
             cmp,
@@ -36,6 +39,8 @@ def game_start()
         cmp |> set("dir", float2(1.0, 0.0))
         cmp |> set("local_pos", float2(12.5, -5.0) * float(SCALE))
         cmp |> set("attached_to", playerEid)
+        cmp |> set("player_idx", PLAYER_INDEX)
+        cmp |> set("damage", PLAYER_DAMAGE)
         apply_decs_template(
             cmp,
              [[Gun
@@ -49,22 +54,28 @@ def game_start()
         cmp |> set("dir", float2(1.0, 0.0))
         cmp |> set("local_pos", float2(12.5, 5.0) * float(SCALE))
         cmp |> set("attached_to", playerEid)
+        cmp |> set("player_idx", PLAYER_INDEX)
+        cmp |> set("damage", PLAYER_DAMAGE)
         apply_decs_template(
             cmp,
              [[Gun
                 cooldown_time=0.5,
                 projectile_type=PLAYER_START_PROJECTILE_TYPE]])
 
-
     // Asteroid
     let asteroidPos = float2(float(WINDOW_WIDTH) * 0.7, float(WINDOW_HEIGHT) * 0.3)
     create_entity <| @(eid, cmp)
         cmp |> set("pos", asteroidPos)
         cmp |> set("size", float2(25.0, 25.0) * float(SCALE))
-        cmp |> set("speed", float2())
+        cmp |> set("speed", 0.0)
         cmp |> set("move_dir", float2())
-        cmp |> set("image_idx", get_image_idx("textures/Asteroid00.png"))
+        cmp |> set("sprite_idx", get_sprite_idx("Asteroid00"))
         cmp |> set("image_angle", 0.0)
+        cmp |> set("image_rotate_speed", -0.75)
+        cmp |> set("player_idx", ENEMY_INDEX)
+        cmp |> set("health", 100.0)
+        cmp |> set("test", 1)
+        // cmp |> set("damage_fx_timer", 0.0)
         apply_decs_template(cmp, [[PlayerInput]])
         apply_decs_template(
             cmp,

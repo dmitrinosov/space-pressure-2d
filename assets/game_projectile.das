@@ -10,17 +10,19 @@ require game_assets
 
 def create_projectile(projectile_type: ProjectileType;
                       pos: float2;
-                      dir: float2)
+                      dir: float2;
+                      player_idx: int;
+                      damage: float)
     var size = float2()
     var speed = 0.0
     var damping = 0.0
-    var imageIdx = 0
+    var spriteIdx = 0
 
     if projectile_type == ProjectileType Projectile00
         size = float2(5.0, 5.0)
         speed = 10000.0
         damping = 256.0
-        imageIdx = get_image_idx("textures/FXSphere00.png")
+        spriteIdx = get_sprite_idx("Projectile00")
     else
         return INVALID_ENTITY_ID
 
@@ -29,8 +31,10 @@ def create_projectile(projectile_type: ProjectileType;
         cmp |> set("size", size * float(SCALE))
         cmp |> set("move_dir", dir)
         cmp |> set("speed", speed * float(SCALE))
-        cmp |> set("image_idx", imageIdx)
+        cmp |> set("sprite_idx", spriteIdx)
         cmp |> set("image_angle", 0.0)
+        cmp |> set("player_idx", player_idx)
+        cmp |> set("damage", damage)
         apply_decs_template(
             cmp,
             [[Projectile]])
@@ -48,4 +52,44 @@ def projectile_borders_es(eid: EntityId;
                           size: float2;
                           pos: float2)
     if (pos.x - size.x * 0.5) > float(WINDOW_WIDTH)
+        delete_entity(eid)
+
+
+def check_overlap(min1: float2;
+                  max1: float2;
+                  min2: float2;
+                  max2: float2)
+    return !((max2.x <= min1.x) || (min2.x >= max1.x) || (max2.y <= min1.y) || (min2.y >= max1.y))
+
+[decs (stage=update_projectile)]
+def projectile_damage_es(eid: EntityId;
+                         projectile: Projectile;
+                         size: float2;
+                         pos: float2;
+                         player_idx: int;
+                         damage: float)
+    let projectilePos = pos
+    let projectileSize = size
+    let projectilePlayerIndex = player_idx
+
+    var enemyEid = INVALID_ENTITY_ID
+    query() <| $(eid: EntityId;
+                 pos: float2;
+                 size: float2;
+                 player_idx: int;
+                 health: float)
+        if player_idx == projectilePlayerIndex
+            return
+
+        if check_overlap(projectilePos - projectileSize * 0.5,
+                         projectilePos + projectileSize * 0.5,
+                         pos - size * 0.5,
+                         pos + size * 0.5)
+            enemyEid = eid
+            return
+
+    if enemyEid != INVALID_ENTITY_ID
+        query(enemyEid) <| $(eid: EntityId;
+                         var damage_fx_timer: float)
+            damage_fx_timer += 0.1
         delete_entity(eid)

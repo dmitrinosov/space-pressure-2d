@@ -29,12 +29,29 @@ def draw_background_es(pos: float2; size: float2)
         draw_image(backImageIdx, float2(backOffset00, 0.0) + backSize * 0.5, backSize, 0.0)
 
 
+[decs (stage=update)]
+def image_rotate_es(image_rotate_speed:float;
+                var image_angle: float&)
+    image_angle += image_rotate_speed * game_vars.dt
+
+
 [decs (stage=draw)]
 def draw_obj_es(pos: float2;
                 size: float2;
-                image_idx: int;
+                sprite_idx: int;
                 image_angle: float)
+    let image_idx = g_game_sprites[sprite_idx].image_idx
     draw_image(image_idx, pos, size, image_angle)
+
+[decs (stage=draw)]
+def draw_damage_fx_es(pos: float2;
+                      size: float2;
+                      sprite_idx: int;
+                      image_angle: float;
+                      damage_fx_timer: float)
+    if damage_fx_timer > 0.0
+        let image_idx = g_game_sprites[sprite_idx].damage_image_idx
+        draw_image(image_idx, pos, size, image_angle)
 
     // let halfSize = size * 0.5
     // rect(pos.x - halfSize.x, pos.y - halfSize.y, size.x, size.y, 0xFFF11079)
