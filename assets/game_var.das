@@ -1,9 +1,14 @@
 require daslib/media
+require daslib/decs
+require daslib/decs_boost
 require random
+
 
 struct GameVars
     rand_seed: int4
     dt: float
+    dbg: int
+
 
 var game_vars: GameVars
 

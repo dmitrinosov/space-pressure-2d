@@ -1,6 +1,7 @@
 require daslib/media
 require daslib/decs
 require daslib/decs_boost
+require daslib/math
 
 require game_config
 require game_templates
@@ -16,6 +17,7 @@ def input_player_es(var input: PlayerInput)
 
 [decs (stage=input)]
 def input_force_es(input: PlayerInput;
+                   speed: float;
                var phys: PhysObj)
     var dir = float2()
 
@@ -28,4 +30,6 @@ def input_force_es(input: PlayerInput;
     if input.right
         dir.x += 1.0
 
-    // normalize(dir)
+    normalize(dir)
+
+    phys.force = dir * speed

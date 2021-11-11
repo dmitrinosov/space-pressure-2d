@@ -1,5 +1,11 @@
 let
+    WINDOW_TITLE = "Space Pressure 2D"
     SCALE = 2
-    WIDTH = 320 * SCALE
-    HEIGHT = 200 * SCALE
+    WINDOW_WIDTH = 320 * SCALE
+    WINDOW_HEIGHT = 200 * SCALE
     FONT_SIZE = 12 * SCALE
+    PLAYER_SIZE = float2(50.0, 25.0) * float(SCALE)
+    PLAYER_SPEED = 5000.0 * float(SCALE)
+    PLAYER_START_POSITION_RATIO = float2(0.2, 0.5)
+    PLAYER_DAMPING = 96.0
+    PHYS_FIXED_DT = 1.0 / 30.0
