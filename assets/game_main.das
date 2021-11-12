@@ -31,7 +31,7 @@ def initialize
     set_resolution(WINDOW_WIDTH, WINDOW_HEIGHT)
     disable_auto_upscale()
     set_antialiasing(0)
-    set_vsync_enabled(true)
+    set_vsync_enabled(false)
 
     load_assets()
     prepare()
