@@ -27,6 +27,8 @@ def create_enemy(enemy_type: EnemyType;
             cmp |> set("player_idx", ENEMY_INDEX)
             cmp |> set("health", 40.0)
             cmp |> set("damage_fx_timer", 0.0)
+            cmp |> set("death_fx_timer", 0.0)
+            cmp |> set("death_fx_time", 0.35)
             cmp |> set("spawn_idx", spawn_idx)
             apply_decs_template(
                 cmp,
@@ -46,6 +48,8 @@ def create_enemy(enemy_type: EnemyType;
             cmp |> set("player_idx", ENEMY_INDEX)
             cmp |> set("health", 65.0)
             cmp |> set("damage_fx_timer", 0.0)
+            cmp |> set("death_fx_timer", 0.0)
+            cmp |> set("death_fx_time", 0.4)
             cmp |> set("spawn_idx", spawn_idx)
             apply_decs_template(
                 cmp,
@@ -65,6 +69,8 @@ def create_enemy(enemy_type: EnemyType;
             cmp |> set("player_idx", ENEMY_INDEX)
             cmp |> set("health", 100.0)
             cmp |> set("damage_fx_timer", 0.0)
+            cmp |> set("death_fx_timer", 0.0)
+            cmp |> set("death_fx_time", 0.45)
             cmp |> set("spawn_idx", spawn_idx)
             apply_decs_template(
                 cmp,
@@ -83,6 +89,8 @@ def create_enemy(enemy_type: EnemyType;
             cmp |> set("player_idx", ENEMY_INDEX)
             cmp |> set("health", 60.0)
             cmp |> set("damage_fx_timer", 0.0)
+            cmp |> set("death_fx_timer", 0.0)
+            cmp |> set("death_fx_time", 0.4)
             cmp |> set("spawn_idx", spawn_idx)
             apply_decs_template(
                 cmp,
@@ -117,6 +125,8 @@ def create_enemy(enemy_type: EnemyType;
             cmp |> set("player_idx", ENEMY_INDEX)
             cmp |> set("health", 80.0)
             cmp |> set("damage_fx_timer", 0.0)
+            cmp |> set("death_fx_timer", 0.0)
+            cmp |> set("death_fx_time", 0.4)
             cmp |> set("spawn_idx", spawn_idx)
             apply_decs_template(
                 cmp,
@@ -134,6 +144,9 @@ def create_enemy(enemy_type: EnemyType;
             cmp |> set("local_pos", float2(0.0, 0.0) * float(SCALE))
             cmp |> set("attached_to", entityEid)
             cmp |> set("player_idx", ENEMY_INDEX)
+            cmp |> set("damage_fx_timer", 0.0)
+            cmp |> set("death_fx_timer", 0.0)
+            cmp |> set("death_fx_time", 0.4)
             cmp |> set("damage", 30.0)
             cmp |> set("active", true)
             cmp |> set("auto_aim", true)
@@ -154,6 +167,8 @@ def create_enemy(enemy_type: EnemyType;
             cmp |> set("player_idx", ENEMY_INDEX)
             cmp |> set("health", 120.0)
             cmp |> set("damage_fx_timer", 0.0)
+            cmp |> set("death_fx_timer", 0.0)
+            cmp |> set("death_fx_time", 0.4)
             cmp |> set("spawn_idx", spawn_idx)
             apply_decs_template(
                 cmp,
@@ -183,41 +198,231 @@ def create_enemy(enemy_type: EnemyType;
         entityEid = create_entity <| @(eid, cmp)
             cmp |> set("pos", pos)
             cmp |> set("size", float2(333.0, 197.0) * 0.35 * float(SCALE))
-            cmp |> set("speed", 460.0 * float(SCALE))
+            cmp |> set("speed", 30.0 * float(SCALE))
             cmp |> set("move_dir", float2(-1.0, 0.0))
             cmp |> set("sprite_idx", get_sprite_idx("Enemy04"))
             cmp |> set("image_angle", 0.0)
             cmp |> set("player_idx", ENEMY_INDEX)
-            cmp |> set("health", 8000.0)
+            cmp |> set("health", 3500.0)
             cmp |> set("damage_fx_timer", 0.0)
+            cmp |> set("death_fx_timer", 0.0)
+            cmp |> set("death_fx_time", 1.0)
             cmp |> set("spawn_idx", spawn_idx)
             cmp |> set("boss_ai", true)
             apply_decs_template(
                 cmp,
                 [[PhysObj
-                    damping=96.0,
+                    damping=1.0,
                     pos=pos,
                     prev_pos=pos]])
 
-        // Gun
+        // Mid Gun
         create_entity <| @(eid, cmp)
             cmp |> set("pos", float2())
-            cmp |> set("size", float2(45.0, 19.0) * 0.25 * float(SCALE))
+            cmp |> set("size", float2(24.0, 32.0) * 0.35 * float(SCALE))
             cmp |> set("dir", float2(-1.0, 0.0))
-            cmp |> set("sprite_idx", get_sprite_idx("EnemyGun00"))
+            cmp |> set("sprite_idx", get_sprite_idx("Enemy04_MidGun00"))
             cmp |> set("image_angle", 0.0)
-            cmp |> set("local_pos", float2(0.0, 0.0) * float(SCALE))
+            cmp |> set("local_pos", float2(-54.0, 0.0) * float(SCALE))
             cmp |> set("attached_to", entityEid)
             cmp |> set("player_idx", ENEMY_INDEX)
+            cmp |> set("health", 600.0)
+            cmp |> set("damage_fx_timer", 0.0)
+            cmp |> set("death_fx_timer", 0.0)
+            cmp |> set("death_fx_time", 0.35)
+            cmp |> set("damage", 30.0)
+            cmp |> set("active", true)
+            // cmp |> set("auto_aim", true)
+            apply_decs_template(
+                cmp,
+                [[Gun
+                    cooldown_time=5.0,
+                    cooldown_timer=random_float(0.0, 2.0),
+                    projectile_type=ProjectileType EnemyProjectile00,
+                    projectile_count=5,
+                    attack_sector=0.5]])
+
+        // Top Gun
+        create_entity <| @(eid, cmp)
+            cmp |> set("pos", float2())
+            cmp |> set("size", float2(50.0, 33.0) * 0.35 * float(SCALE))
+            cmp |> set("dir", float2(-1.0, 0.0))
+            cmp |> set("sprite_idx", get_sprite_idx("Enemy04_TopGun00"))
+            cmp |> set("image_angle", 0.0)
+            cmp |> set("local_pos", float2(-45.0, -11.0) * float(SCALE))
+            cmp |> set("attached_to", entityEid)
+            cmp |> set("player_idx", ENEMY_INDEX)
+            cmp |> set("health", 600.0)
+            cmp |> set("damage_fx_timer", 0.0)
+            cmp |> set("death_fx_timer", 0.0)
+            cmp |> set("death_fx_time", 0.35)
+            cmp |> set("damage", 30.0)
+            cmp |> set("active", true)
+            // cmp |> set("auto_aim", true)
+            apply_decs_template(
+                cmp,
+                [[Gun
+                    cooldown_time=4.0,
+                    cooldown_timer=random_float(0.0, 2.0),
+                    projectile_type=ProjectileType EnemyProjectile01,
+                    projectile_count=3,
+                    attack_sector=0.25]])
+
+        // Bottom Gun
+        create_entity <| @(eid, cmp)
+            cmp |> set("pos", float2())
+            cmp |> set("size", float2(50.0, 33.0) * 0.35 * float(SCALE))
+            cmp |> set("dir", float2(-1.0, 0.0))
+            cmp |> set("sprite_idx", get_sprite_idx("Enemy04_BottomGun00"))
+            cmp |> set("image_angle", 0.0)
+            cmp |> set("local_pos", float2(-45.0, 11.0) * float(SCALE))
+            cmp |> set("attached_to", entityEid)
+            cmp |> set("player_idx", ENEMY_INDEX)
+            cmp |> set("health", 600.0)
+            cmp |> set("damage_fx_timer", 0.0)
+            cmp |> set("death_fx_timer", 0.0)
+            cmp |> set("death_fx_time", 0.35)
+            cmp |> set("damage", 30.0)
+            cmp |> set("active", true)
+            // cmp |> set("auto_aim", true)
+            apply_decs_template(
+                cmp,
+                [[Gun
+                    cooldown_time=4.0,
+                    cooldown_timer=random_float(0.0, 2.0),
+                    projectile_type=ProjectileType EnemyProjectile01,
+                    projectile_count=3,
+                    attack_sector=0.25]])
+
+        // SideGun00
+        create_entity <| @(eid, cmp)
+            cmp |> set("pos", float2())
+            cmp |> set("size", float2(84.0, 22.0) * 0.25 * float(SCALE))
+            cmp |> set("dir", float2(-1.0, 0.0))
+            cmp |> set("sprite_idx", get_sprite_idx("Enemy04_SideGun00"))
+            cmp |> set("image_angle", 0.0)
+            cmp |> set("local_pos", float2(-55.0, -30.0) * float(SCALE))
+            cmp |> set("attached_to", entityEid)
+            cmp |> set("player_idx", ENEMY_INDEX)
+            cmp |> set("health", 400.0)
+            cmp |> set("damage_fx_timer", 0.0)
+            cmp |> set("death_fx_timer", 0.0)
+            cmp |> set("death_fx_time", 0.35)
             cmp |> set("damage", 30.0)
             cmp |> set("active", true)
             cmp |> set("auto_aim", true)
             apply_decs_template(
                 cmp,
                 [[Gun
-                    cooldown_time=2.0,
+                    cooldown_time=1.0,
                     cooldown_timer=random_float(0.0, 2.0),
-                    projectile_type=ProjectileType EnemyProjectile00]])
+                    projectile_type=ProjectileType EnemyProjectile00,
+                    projectile_count=1,
+                    attack_sector=0.0]])
+
+        // SideGun01
+        create_entity <| @(eid, cmp)
+            cmp |> set("pos", float2())
+            cmp |> set("size", float2(84.0, 22.0) * 0.25 * float(SCALE))
+            cmp |> set("dir", float2(-1.0, 0.0))
+            cmp |> set("sprite_idx", get_sprite_idx("Enemy04_SideGun00"))
+            cmp |> set("image_angle", 0.0)
+            cmp |> set("local_pos", float2(-48.0, -24.0) * float(SCALE))
+            cmp |> set("attached_to", entityEid)
+            cmp |> set("player_idx", ENEMY_INDEX)
+            cmp |> set("health", 400.0)
+            cmp |> set("damage_fx_timer", 0.0)
+            cmp |> set("death_fx_timer", 0.0)
+            cmp |> set("death_fx_time", 0.35)
+            cmp |> set("damage", 30.0)
+            cmp |> set("active", true)
+            cmp |> set("auto_aim", true)
+            apply_decs_template(
+                cmp,
+                [[Gun
+                    cooldown_time=1.5,
+                    cooldown_timer=random_float(0.0, 2.0),
+                    projectile_type=ProjectileType EnemyProjectile00,
+                    projectile_count=1,
+                    attack_sector=0.0]])
+
+        // SideGun02
+        create_entity <| @(eid, cmp)
+            cmp |> set("pos", float2())
+            cmp |> set("size", float2(84.0, 22.0) * 0.25 * float(SCALE))
+            cmp |> set("dir", float2(-1.0, 0.0))
+            cmp |> set("sprite_idx", get_sprite_idx("Enemy04_SideGun00"))
+            cmp |> set("image_angle", 0.0)
+            cmp |> set("local_pos", float2(-48.0, 24.0) * float(SCALE))
+            cmp |> set("attached_to", entityEid)
+            cmp |> set("player_idx", ENEMY_INDEX)
+            cmp |> set("health", 400.0)
+            cmp |> set("damage_fx_timer", 0.0)
+            cmp |> set("death_fx_timer", 0.0)
+            cmp |> set("death_fx_time", 0.35)
+            cmp |> set("damage", 30.0)
+            cmp |> set("active", true)
+            cmp |> set("auto_aim", true)
+            apply_decs_template(
+                cmp,
+                [[Gun
+                    cooldown_time=1.5,
+                    cooldown_timer=random_float(0.0, 2.0),
+                    projectile_type=ProjectileType EnemyProjectile00,
+                    projectile_count=1,
+                    attack_sector=0.0]])
+
+        // SideGun03
+        create_entity <| @(eid, cmp)
+            cmp |> set("pos", float2())
+            cmp |> set("size", float2(84.0, 22.0) * 0.25 * float(SCALE))
+            cmp |> set("dir", float2(-1.0, 0.0))
+            cmp |> set("sprite_idx", get_sprite_idx("Enemy04_SideGun00"))
+            cmp |> set("image_angle", 0.0)
+            cmp |> set("local_pos", float2(-55.0, 30.0) * float(SCALE))
+            cmp |> set("attached_to", entityEid)
+            cmp |> set("player_idx", ENEMY_INDEX)
+            cmp |> set("health", 400.0)
+            cmp |> set("damage_fx_timer", 0.0)
+            cmp |> set("death_fx_timer", 0.0)
+            cmp |> set("death_fx_time", 0.35)
+            cmp |> set("damage", 30.0)
+            cmp |> set("active", true)
+            cmp |> set("auto_aim", true)
+            apply_decs_template(
+                cmp,
+                [[Gun
+                    cooldown_time=1.0,
+                    cooldown_timer=random_float(0.0, 2.0),
+                    projectile_type=ProjectileType EnemyProjectile00,
+                    projectile_count=1,
+                    attack_sector=0.0]])
+
+        // CentralGun00
+        create_entity <| @(eid, cmp)
+            cmp |> set("pos", float2())
+            cmp |> set("size", float2(84.0, 22.0) * 0.25 * float(SCALE))
+            cmp |> set("dir", float2(-1.0, 0.0))
+            cmp |> set("sprite_idx", get_sprite_idx("Enemy04_SideGun00"))
+            cmp |> set("image_angle", 0.0)
+            cmp |> set("local_pos", float2(-15.0, 0.0) * float(SCALE))
+            cmp |> set("attached_to", entityEid)
+            cmp |> set("player_idx", ENEMY_INDEX)
+            cmp |> set("damage_fx_timer", 0.0)
+            cmp |> set("death_fx_timer", 0.0)
+            cmp |> set("death_fx_time", 0.35)
+            cmp |> set("damage", 30.0)
+            cmp |> set("active", true)
+            cmp |> set("auto_aim", true)
+            apply_decs_template(
+                cmp,
+                [[Gun
+                    cooldown_time=1.0,
+                    cooldown_timer=random_float(0.0, 2.0),
+                    projectile_type=ProjectileType EnemyProjectile00,
+                    projectile_count=1,
+                    attack_sector=0.0]])
+
 
 
     return entityEid
@@ -241,12 +446,12 @@ def boss_ai_es(eid: EntityId;
                boss_ai: bool;
            var move_dir: float2)
     var moveDir = move_dir
-    moveDir.x = pos.x < float(WINDOW_WIDTH) * 0.75 ? 0.0 : moveDir.x
+    moveDir.x = pos.x < float(WINDOW_WIDTH) * 0.85 ? 0.0 : moveDir.x
     if moveDir.y == 0.0
         moveDir.y = -1.0
-    elif moveDir.y > 0.0 && pos.y > float(WINDOW_HEIGHT) * 0.7
+    elif moveDir.y > 0.0 && pos.y > float(WINDOW_HEIGHT) * 0.75
         moveDir.y = -1.0
-    elif moveDir.y < 0.0 && pos.y < float(WINDOW_HEIGHT) * 0.3
+    elif moveDir.y < 0.0 && pos.y < float(WINDOW_HEIGHT) * 0.25
         moveDir.y = 1.0
 
     move_dir = normalize(moveDir)

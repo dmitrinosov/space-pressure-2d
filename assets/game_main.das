@@ -17,6 +17,13 @@ require game_level
 require game_draw
 
 
+def prepare()
+    decs_stage("clear")
+
+    initialize_game_vars()
+    game_start()
+
+
 // Runs once when game starts and every hot-reload
 [export]
 def initialize
@@ -26,11 +33,8 @@ def initialize
     set_antialiasing(0)
     set_vsync_enabled(false)
 
-    decs_stage("clear")
-
-    initialize_game_vars()
     load_assets()
-    game_start()
+    prepare()
     return
 
 
@@ -47,7 +51,7 @@ def act(var dt: float)
 
     let restart = !game_update(dt)
     if restart
-        initialize()
+        prepare()
         return
 
     decs_stage("update")
@@ -64,6 +68,8 @@ def draw
     draw_background()
 
     decs_stage("draw")
+    let hp = get_player_health() / PLAYER_HEALTH
+    text_out(10, 0, "HP  {floori(hp * 100.0)}", 0xffffffff)
     // text_out(0, 0, "{game_vars.dbg}", 0xffffffff)
 
     draw_fade()

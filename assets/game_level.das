@@ -20,8 +20,7 @@ struct LevelSpawnData
 let level_data_null = [[LevelSpawnData]]
 
 let level_data00 = [[LevelSpawnData[]
-    [[LevelSpawnData time=0.0, enemy=EnemyType Boss00, x_offset=50.0, y_ratio=0.5]]
-    /*
+
     [[LevelSpawnData time=0.0, enemy=EnemyType AsteroidSmall00, x_offset=50.0, y_ratio=0.1]];
     [[LevelSpawnData time=0.0, enemy=EnemyType AsteroidMedium00, x_offset=150.0, y_ratio=0.7]];
     [[LevelSpawnData time=0.0, enemy=EnemyType AsteroidSmall00, x_offset=350.0, y_ratio=0.4]];
@@ -119,8 +118,10 @@ let level_data00 = [[LevelSpawnData[]
     [[LevelSpawnData time=82.0, enemy=EnemyType Enemy02, x_offset=50.0, y_ratio=0.7]];
 
     [[LevelSpawnData time=87.0, enemy=EnemyType Enemy02, x_offset=50.0, y_ratio=0.3]];
-    [[LevelSpawnData time=87.0, enemy=EnemyType Enemy02, x_offset=50.0, y_ratio=0.7]]
-    */
+    [[LevelSpawnData time=87.0, enemy=EnemyType Enemy02, x_offset=50.0, y_ratio=0.7]];
+
+
+    [[LevelSpawnData time=102.0, enemy=EnemyType Boss00, x_offset=100.0, y_ratio=0.5]]
 ]]
 
 

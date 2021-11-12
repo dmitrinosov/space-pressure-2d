@@ -26,6 +26,8 @@ def create_player()
         cmp |> set("player_idx", PLAYER_INDEX)
         cmp |> set("health", PLAYER_HEALTH)
         cmp |> set("damage_fx_timer", 0.0)
+        cmp |> set("death_fx_timer", 0.0)
+        cmp |> set("death_fx_time", 0.5)
         apply_decs_template(cmp, [[PlayerInput]])
         apply_decs_template(
             cmp,
@@ -148,10 +150,11 @@ def game_update(dt: float)
         let allEnemiesSpawned = (game_vars.spawn_index >= levelSpawnDataSize)
         var allEnemiesDead = true
         query() <| $(player_idx: int;
-                        health: float)
+                     health: float;
+                     death_fx_timer: float)
             if player_idx != ENEMY_INDEX
                 return
-            if health > 0.0
+            if health > 0.0 || death_fx_timer > 0.0
                 allEnemiesDead = false
 
         if allEnemiesSpawned && allEnemiesDead
@@ -228,6 +231,9 @@ def player_enemy_collision_es(eid: EntityId;
         if player_idx == playerIdx
             return
 
+        if health <= 0.0
+            return
+
         if check_obj_overlap(playerPos, playerSize,
                              pos, size)
             enemyEid = eid
@@ -262,6 +268,14 @@ def update_damage_fx_timer_es(var damage_fx_timer: float)
     if damage_fx_timer > 0.0
         damage_fx_timer -= game_vars.dt
 
+
+[decs (stage=update_play)]
+def update_death_fx_timer_es(eid: EntityId;
+                         var death_fx_timer: float)
+    if death_fx_timer > 0.0
+        death_fx_timer -= game_vars.dt
+        if death_fx_timer <= 0.0
+            delete_unit_entity(eid)
 
 [decs(stage=clear)]
 def clear_all_es(var eid: EntityId)

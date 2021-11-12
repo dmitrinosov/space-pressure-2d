@@ -19,7 +19,7 @@ let
     SCALE = 4
     WINDOW_WIDTH = 320 * SCALE
     WINDOW_HEIGHT = 200 * SCALE
-    FONT_SIZE = 12 * SCALE
+    FONT_SIZE = 8 * SCALE
     PLAYER_SIZE = float2(163.0, 163.0) * 0.3  * 0.5 * float(SCALE)
     PLAYER_SPEED = 4600.0 * float(SCALE)
     PLAYER_START_POSITION_RATIO = float2(0.2, 0.5)

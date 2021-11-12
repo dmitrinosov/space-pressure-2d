@@ -78,19 +78,35 @@ def projectile_damage_es(eid: EntityId;
     let projectilePlayerIndex = player_idx
 
     var enemyEid = INVALID_ENTITY_ID
+    var minSqrDistanceToEnemy = 9999999.0
     query() <| $(eid: EntityId;
                  pos: float2;
                  size: float2;
                  player_idx: int;
-                 health: float)
+                 health: float;
+                 sprite_idx: int)
         if player_idx == projectilePlayerIndex
+            return
+
+        if health <= 0.0
             return
 
         if check_obj_overlap(projectilePos,
                              projectileSize,
                              pos,
                              size)
-            enemyEid = eid
+
+            var imageIdx = g_game_sprites[sprite_idx].image_idx
+            let image& = g_images[imageIdx]
+            let uv = float2((projectilePos.x - (pos.x - size.x * 0.5)) / size.x,
+                            (projectilePos.y - (pos.y - size.y * 0.5)) / size.y)
+            if !alpha_test(image, uv)
+                return
+
+            let sqrDistanceToEnemy = dot(projectilePos - pos, projectilePos - pos)
+            if sqrDistanceToEnemy < minSqrDistanceToEnemy
+                enemyEid = eid
+                minSqrDistanceToEnemy = sqrDistanceToEnemy
             return
 
     if enemyEid != INVALID_ENTITY_ID

@@ -40,22 +40,34 @@ def image_rotate_es(image_rotate_speed:float;
 
 
 [decs (stage=draw)]
-def draw_obj_es(pos: float2;
+def draw_obj_es(eid: EntityId;
+                pos: float2;
                 size: float2;
                 sprite_idx: int;
                 image_angle: float)
-    let image_idx = g_game_sprites[sprite_idx].image_idx
-    draw_image(image_idx, pos, size, image_angle)
+    var imageIdx = g_game_sprites[sprite_idx].image_idx
+    query(eid) <| $(death_fx_timer: float;
+                    death_fx_time: float)
+        if death_fx_timer > 0.0
+            imageIdx = g_game_sprites[sprite_idx].death_images_idxs[floori((1.0 - death_fx_timer/death_fx_time) * (float(DEATH_IMAGES_COUNT) - 1.0))]
+
+    draw_image(imageIdx, pos, size, image_angle)
 
 [decs (stage=draw)]
-def draw_damage_fx_es(pos: float2;
+def draw_damage_fx_es(eid: EntityId;
+                      pos: float2;
                       size: float2;
                       sprite_idx: int;
                       image_angle: float;
                       damage_fx_timer: float)
     if damage_fx_timer > 0.0
-        let image_idx = g_game_sprites[sprite_idx].damage_image_idx
-        draw_image(image_idx, pos, size, image_angle)
+        var playDamageFX = true
+        query(eid) <| $(death_fx_timer: float)
+            if death_fx_timer > 0.0
+                playDamageFX = false
+        if playDamageFX
+            let image_idx = g_game_sprites[sprite_idx].damage_image_idx
+            draw_image(image_idx, pos, size, image_angle)
 
 /*
 [decs (stage=draw)]
@@ -64,10 +76,11 @@ def draw_spawn_idx_es(pos: float2;
     text_out(pos.x, pos.y, "{spawn_idx}", 0xffffffff)
 */
 
-
+/*
 [decs (stage=draw)]
 def draw_gun_es(pos: float2;
                 size: float2;
                 gun :Gun)
     let halfSize = size * 0.5
     rect(pos.x - halfSize.x, pos.y - halfSize.y, size.x, size.y, 0xFFF11079)
+*/
