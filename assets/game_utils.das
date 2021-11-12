@@ -89,6 +89,8 @@ def start_unit_death_fx(eid: EntityId)
     query(eid) <| $(death_fx_time: float;
                 var death_fx_timer: float)
         death_fx_timer = death_fx_time
+    query(eid) <| $(score: int)
+        game_vars.score += score
 
 
 def do_damage(eid: EntityId;

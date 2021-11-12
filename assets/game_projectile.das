@@ -24,6 +24,11 @@ def create_projectile(projectile_type: ProjectileType;
         speed = 10000.0
         damping = 256.0
         spriteIdx = get_sprite_idx("Projectile02")
+    elif projectile_type == ProjectileType PlayerProjectile01
+        size = float2(4.0, 4.0)
+        speed = 10000.0
+        damping = 256.0
+        spriteIdx = get_sprite_idx("Projectile02")
     elif projectile_type == ProjectileType EnemyProjectile00
         size = float2(5.0, 5.0)
         speed = 2500.0

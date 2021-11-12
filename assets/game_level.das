@@ -25,7 +25,7 @@ let level_data00 = [[LevelSpawnData[]
     [[LevelSpawnData time=0.0, enemy=EnemyType AsteroidMedium00, x_offset=150.0, y_ratio=0.7]];
     [[LevelSpawnData time=0.0, enemy=EnemyType AsteroidSmall00, x_offset=350.0, y_ratio=0.4]];
     [[LevelSpawnData time=0.0, enemy=EnemyType AsteroidMedium00, x_offset=78.0, y_ratio=0.36]];
-    [[LevelSpawnData time=0.0, enemy=EnemyType AsteroidBig00, x_offset=52.0, y_ratio=0.9]];
+    [[LevelSpawnData time=0.0, enemy=EnemyType AsteroidBig00, x_offset=262.0, y_ratio=0.9]];
     [[LevelSpawnData time=2.0, enemy=EnemyType AsteroidMedium00, x_offset=124.0, y_ratio=0.32]];
     [[LevelSpawnData time=2.0, enemy=EnemyType AsteroidSmall00, x_offset=245.0, y_ratio=0.84]];
     [[LevelSpawnData time=2.0, enemy=EnemyType AsteroidMedium00, x_offset=99.0, y_ratio=0.65]];
@@ -40,7 +40,7 @@ let level_data00 = [[LevelSpawnData[]
     [[LevelSpawnData time=6.0, enemy=EnemyType AsteroidMedium00, x_offset=675.0, y_ratio=0.88]];
     [[LevelSpawnData time=6.0, enemy=EnemyType AsteroidSmall00, x_offset=50.0, y_ratio=0.1]];
     [[LevelSpawnData time=6.0, enemy=EnemyType AsteroidSmall00, x_offset=150.0, y_ratio=0.94]];
-    [[LevelSpawnData time=6.0, enemy=EnemyType AsteroidSmall00, x_offset=350.0, y_ratio=0.9]];
+    [[LevelSpawnData time=6.0, enemy=EnemyType AsteroidSmall00, x_offset=350.0, y_ratio=0.75]];
     [[LevelSpawnData time=6.0, enemy=EnemyType AsteroidSmall00, x_offset=78.0, y_ratio=0.5]];
 
     [[LevelSpawnData time=8.0, enemy=EnemyType AsteroidSmall00, x_offset=52.0, y_ratio=0.9]];
@@ -53,6 +53,7 @@ let level_data00 = [[LevelSpawnData[]
     [[LevelSpawnData time=10.0, enemy=EnemyType AsteroidMedium00, x_offset=346.0, y_ratio=0.74]];
     [[LevelSpawnData time=10.0, enemy=EnemyType AsteroidMedium00, x_offset=234.0, y_ratio=0.14]];
     [[LevelSpawnData time=10.0, enemy=EnemyType AsteroidMedium00, x_offset=576.0, y_ratio=0.43]];
+    [[LevelSpawnData time=10.0, enemy=EnemyType Health00, x_offset=590.0, y_ratio=0.23]];
 
     [[LevelSpawnData time=12.0, enemy=EnemyType AsteroidBig00, x_offset=412.0, y_ratio=0.24]];
     [[LevelSpawnData time=12.0, enemy=EnemyType AsteroidBig00, x_offset=475.0, y_ratio=0.58]];
@@ -64,6 +65,7 @@ let level_data00 = [[LevelSpawnData[]
     [[LevelSpawnData time=27.0, enemy=EnemyType Enemy00, x_offset=70.0, y_ratio=0.4]];
     [[LevelSpawnData time=27.0, enemy=EnemyType Enemy01, x_offset=50.0, y_ratio=0.5]];
     [[LevelSpawnData time=27.0, enemy=EnemyType Enemy00, x_offset=70.0, y_ratio=0.6]];
+    [[LevelSpawnData time=27.0, enemy=EnemyType Weapon00, x_offset=70.0, y_ratio=0.5]];
 
 
     [[LevelSpawnData time=42.0, enemy=EnemyType Enemy00, x_offset=130.0, y_ratio=0.1]];
@@ -90,12 +92,15 @@ let level_data00 = [[LevelSpawnData[]
     [[LevelSpawnData time=52.0, enemy=EnemyType Enemy01, x_offset=60.0, y_ratio=0.7]];
     [[LevelSpawnData time=52.0, enemy=EnemyType Enemy01, x_offset=60.0, y_ratio=0.9]];
 
+    [[LevelSpawnData time=52.0, enemy=EnemyType Health00, x_offset=90.0, y_ratio=0.5]];
+
 
     [[LevelSpawnData time=62.0, enemy=EnemyType Enemy01, x_offset=50.0, y_ratio=0.4]];
     [[LevelSpawnData time=62.0, enemy=EnemyType Enemy00, x_offset=50.0, y_ratio=0.5]];
     [[LevelSpawnData time=62.0, enemy=EnemyType Enemy01, x_offset=50.0, y_ratio=0.6]];
 
     [[LevelSpawnData time=62.0, enemy=EnemyType Enemy00, x_offset=70.0, y_ratio=0.4]];
+    [[LevelSpawnData time=62.0, enemy=EnemyType Weapon00, x_offset=70.0, y_ratio=0.5]];
     [[LevelSpawnData time=62.0, enemy=EnemyType Enemy00, x_offset=70.0, y_ratio=0.6]];
 
     [[LevelSpawnData time=62.0, enemy=EnemyType Enemy01, x_offset=90.0, y_ratio=0.4]];

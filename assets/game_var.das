@@ -24,6 +24,8 @@ struct GameVars
     fade_progress: float
     fly_progress: float
     fly_x: float
+    weapon_level: int
+    score: int
     dbg: float
 
 var game_vars: GameVars

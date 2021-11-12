@@ -31,6 +31,8 @@ var g_game_sprites = [[GameSprite[]
     [[GameSprite id="Enemy04_BottomGun00", texture_path="textures/Enemy04_BottomGun00.png", generate_damage_image=true, genererate_death_images=true]];
     [[GameSprite id="Enemy04_TopGun00", texture_path="textures/Enemy04_TopGun00.png", generate_damage_image=true, genererate_death_images=true]];
     [[GameSprite id="Enemy04_SideGun00", texture_path="textures/Enemy04_SideGun00.png", generate_damage_image=true, genererate_death_images=true]];
+    [[GameSprite id="Health00", texture_path="textures/Health00.png", genererate_death_images=true]];
+    [[GameSprite id="Weapon00", texture_path="textures/Weapon00.png", genererate_death_images=true]];
     [[GameSprite id="Projectile00", texture_path="textures/FXSphere00.png"]];
     [[GameSprite id="Projectile01", texture_path="textures/Projectile01b.png"]];
     [[GameSprite id="Projectile02", texture_path="textures/Projectile02.png"]];

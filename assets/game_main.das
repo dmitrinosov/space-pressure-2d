@@ -69,7 +69,7 @@ def draw
 
     decs_stage("draw")
     let hp = get_player_health() / PLAYER_HEALTH
-    text_out(10, 0, "HP  {floori(hp * 100.0)}", 0xffffffff)
+    text_out(10, 0, "HP  {floori(hp * 100.0)}               SCORE  {game_vars.score}", 0xffffffff)
     // text_out(0, 0, "{game_vars.dbg}", 0xffffffff)
 
     draw_fade()

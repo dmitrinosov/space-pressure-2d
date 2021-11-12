@@ -36,6 +36,24 @@ def create_player()
                 pos=playerPos,
                 prev_pos=playerPos]])
 
+    // Player Mid Gun
+    create_entity <| @(eid, cmp)
+        cmp |> set("pos", float2())
+        cmp |> set("size", float2(10.0, 10.0))
+        cmp |> set("dir", float2(1.0, 0.0))
+        cmp |> set("local_pos", float2(16.5, 0.0) * 0.85 * float(SCALE))
+        cmp |> set("attached_to", playerEid)
+        cmp |> set("player_idx", PLAYER_INDEX)
+        cmp |> set("damage", PLAYER_DAMAGE)
+        cmp |> set("active", false)
+        cmp |> set("index", 0)
+        apply_decs_template(
+            cmp,
+             [[Gun
+                cooldown_time=PLAYER_COOLDOWN * 0.9,
+                projectile_type=PLAYER_MID_PROJECTILE_TYPE]])
+
+
     // Player Top Gun
     create_entity <| @(eid, cmp)
         cmp |> set("pos", float2())
@@ -46,11 +64,12 @@ def create_player()
         cmp |> set("player_idx", PLAYER_INDEX)
         cmp |> set("damage", PLAYER_DAMAGE)
         cmp |> set("active", false)
+        cmp |> set("index", 1)
         apply_decs_template(
             cmp,
              [[Gun
                 cooldown_time=PLAYER_COOLDOWN,
-                projectile_type=PLAYER_START_PROJECTILE_TYPE]])
+                projectile_type=PLAYER_SIDE_PROJECTILE_TYPE]])
 
     // Player Bottom Gun
     create_entity <| @(eid, cmp)
@@ -62,12 +81,28 @@ def create_player()
         cmp |> set("player_idx", PLAYER_INDEX)
         cmp |> set("damage", PLAYER_DAMAGE)
         cmp |> set("active", false)
+        cmp |> set("index", 2)
         apply_decs_template(
             cmp,
              [[Gun
                 cooldown_time=PLAYER_COOLDOWN,
-                projectile_type=PLAYER_START_PROJECTILE_TYPE]])
+                projectile_type=PLAYER_SIDE_PROJECTILE_TYPE]])
 
+def is_player_gun_available(index: int)
+    if index == 0
+        return game_vars.weapon_level == 0 || game_vars.weapon_level > 1
+    else
+        return game_vars.weapon_level > 0
+
+
+def update_player_weapon()
+    find_query() <| $(eid: EntityId;
+                      input: PlayerInput)
+        query() <| $(attached_to: EntityId;
+                     index: int;
+                 var active: bool)
+            if attached_to == eid
+                active = is_player_gun_available(index)
 
 def set_player_pos(pos: float2)
     find_query() <| $(eid: EntityId;
@@ -124,7 +159,7 @@ def game_update(dt: float)
         if game_vars.fly_progress >= 1.0
             game_vars.fly_progress = 1.0
             game_vars.game_state = GameState Game
-            activate_player_guns(true)
+            update_player_weapon()
     elif game_vars.game_state == GameState Game
         let levelSpawnDataSize = get_level_spawn_data_size(game_vars.level)
         var enemiesSpawned = 0
@@ -215,6 +250,7 @@ def player_enemy_collision_es(eid: EntityId;
                               size: float2;
                               player_idx: int;
                               input: PlayerInput;
+                          var health: float;
                           var phys: PhysObj)
     let playerPos = pos
     let playerSize = size
@@ -244,6 +280,33 @@ def player_enemy_collision_es(eid: EntityId;
         phys.velocity += toPlayer * 350.0
 
         do_damage(eid, PLAYER_COLLISION_DAMAGE, ENEMY_INDEX)
+
+    query() <| $(eid: EntityId;
+                 pos: float2;
+                 size: float2;
+                 phys: PhysObj;
+                 health_bonus: float;
+                 death_fx_timer: float)
+        if death_fx_timer > 0.0
+            return
+        if check_obj_overlap(playerPos, playerSize,
+                             pos, size)
+            health = min(health + health_bonus, PLAYER_HEALTH)
+            start_unit_death_fx(eid)
+
+    query() <| $(eid: EntityId;
+                 pos: float2;
+                 size: float2;
+                 phys: PhysObj;
+                 weapon_bonus: int;
+                 death_fx_timer: float)
+        if death_fx_timer > 0.0
+            return
+        if check_obj_overlap(playerPos, playerSize,
+                             pos, size)
+            game_vars.weapon_level += weapon_bonus
+            update_player_weapon()
+            start_unit_death_fx(eid)
 
 
 [decs (stage=phys_pre_update)]

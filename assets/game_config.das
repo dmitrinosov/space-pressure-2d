@@ -1,11 +1,14 @@
 enum ProjectileType: int
     None
     PlayerProjectile00
+    PlayerProjectile01
     EnemyProjectile00
     EnemyProjectile01
 
 enum EnemyType: int
     None
+    Health00
+    Weapon00
     AsteroidSmall00
     AsteroidMedium00
     AsteroidBig00
@@ -24,7 +27,8 @@ let
     PLAYER_SPEED = 4600.0 * float(SCALE)
     PLAYER_START_POSITION_RATIO = float2(0.2, 0.5)
     PLAYER_COOLDOWN = 0.15
-    PLAYER_START_PROJECTILE_TYPE = ProjectileType PlayerProjectile00
+    PLAYER_MID_PROJECTILE_TYPE = ProjectileType PlayerProjectile00
+    PLAYER_SIDE_PROJECTILE_TYPE = ProjectileType PlayerProjectile01
     PLAYER_DAMPING = 96.0
     PLAYER_HEALTH = 150.0
     PLAYER_DAMAGE = 10.0
