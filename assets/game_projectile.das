@@ -19,11 +19,21 @@ def create_projectile(projectile_type: ProjectileType;
     var damping = 0.0
     var spriteIdx = 0
 
-    if projectile_type == ProjectileType Projectile00
+    if projectile_type == ProjectileType PlayerProjectile00
         size = float2(5.0, 5.0)
         speed = 10000.0
         damping = 256.0
+        spriteIdx = get_sprite_idx("Projectile02")
+    elif projectile_type == ProjectileType EnemyProjectile00
+        size = float2(5.0, 5.0)
+        speed = 2500.0
+        damping = 256.0
         spriteIdx = get_sprite_idx("Projectile00")
+    elif projectile_type == ProjectileType EnemyProjectile01
+        size = float2(5.0, 5.0)
+        speed = 2000.0
+        damping = 256.0
+        spriteIdx = get_sprite_idx("Projectile03")
     else
         return INVALID_ENTITY_ID
 

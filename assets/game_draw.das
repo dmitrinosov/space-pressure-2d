@@ -57,14 +57,17 @@ def draw_damage_fx_es(pos: float2;
         let image_idx = g_game_sprites[sprite_idx].damage_image_idx
         draw_image(image_idx, pos, size, image_angle)
 
-    // let halfSize = size * 0.5
-    // rect(pos.x - halfSize.x, pos.y - halfSize.y, size.x, size.y, 0xFFF11079)
-
 /*
+[decs (stage=draw)]
+def draw_spawn_idx_es(pos: float2;
+                      spawn_idx: int)
+    text_out(pos.x, pos.y, "{spawn_idx}", 0xffffffff)
+*/
+
+
 [decs (stage=draw)]
 def draw_gun_es(pos: float2;
                 size: float2;
                 gun :Gun)
     let halfSize = size * 0.5
     rect(pos.x - halfSize.x, pos.y - halfSize.y, size.x, size.y, 0xFFF11079)
-*/

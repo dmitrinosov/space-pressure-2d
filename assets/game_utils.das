@@ -34,13 +34,41 @@ def random_float(min, max: float)
     return min + random_float(game_vars.rand_seed) * (max - min)
 
 
+def delete_unit_entity(eid: EntityId)
+    let entityEid = eid
+    query() <| $(eid: EntityId;
+                attached_to: EntityId)
+        if attached_to == entityEid
+            delete_entity(eid)
+    delete_entity(entityEid)
+
+
+def rotate_vector(vec: float2; angle: float)
+    let s = sin(angle)
+    let c = cos(angle)
+    return float2(c * vec.x - s * vec.y, s * vec.x + c * vec.y)
+
+
 def do_damage(eid: EntityId;
               damage: float;
               player_idx: int)
+    if eid == INVALID_ENTITY_ID
+        return
+
+    if game_vars.game_state != GameState Game
+        return
+
+    let DAMAGE_FX_TIME = 0.055
     query(eid) <| $(eid: EntityId;
                 var damage_fx_timer: float)
-        damage_fx_timer = 0.055
+        damage_fx_timer = DAMAGE_FX_TIME
+    query() <| $(attached_to: EntityId;
+             var damage_fx_timer: float)
+        if attached_to == eid
+            damage_fx_timer = DAMAGE_FX_TIME
+
     query(eid) <| $(var health: float)
-        health -= damage
-        if health < 0.0
-            delete_entity(eid)
+        if health > 0.0
+            health -= damage
+            if health <= 0.0
+                delete_unit_entity(eid)

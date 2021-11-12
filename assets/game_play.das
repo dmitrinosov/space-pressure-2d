@@ -39,7 +39,7 @@ def create_player()
         cmp |> set("pos", float2())
         cmp |> set("size", float2(10.0, 10.0))
         cmp |> set("dir", float2(1.0, 0.0))
-        cmp |> set("local_pos", float2(12.5, -5.0) * float(SCALE))
+        cmp |> set("local_pos", float2(13.5, -5.0) * 0.85 * float(SCALE))
         cmp |> set("attached_to", playerEid)
         cmp |> set("player_idx", PLAYER_INDEX)
         cmp |> set("damage", PLAYER_DAMAGE)
@@ -55,7 +55,7 @@ def create_player()
         cmp |> set("pos", float2())
         cmp |> set("size", float2(10.0, 10.0))
         cmp |> set("dir", float2(1.0, 0.0))
-        cmp |> set("local_pos", float2(12.5, 5.0) * float(SCALE))
+        cmp |> set("local_pos", float2(13.5, 5.0) * 0.85 * float(SCALE))
         cmp |> set("attached_to", playerEid)
         cmp |> set("player_idx", PLAYER_INDEX)
         cmp |> set("damage", PLAYER_DAMAGE)
@@ -76,10 +76,16 @@ def set_player_pos(pos: float2)
 
 def get_player_pos()
     var result = float2()
-    find_query() <| $(eid: EntityId;
-                      input: PlayerInput;
-                  var phys: PhysObj)
+    find_query() <| $(input: PlayerInput;
+                      phys: PhysObj)
         result = phys.pos
+    return result
+
+def get_player_health()
+    var result = 0.0
+    find_query() <| $(input: PlayerInput;
+                      health: float)
+        result = health
     return result
 
 def activate_player_guns(value: bool)
@@ -119,16 +125,25 @@ def game_update(dt: float)
             activate_player_guns(true)
     elif game_vars.game_state == GameState Game
         let levelSpawnDataSize = get_level_spawn_data_size(game_vars.level)
+        var enemiesSpawned = 0
         while game_vars.spawn_index < levelSpawnDataSize
             let spawnData = get_level_spawn_data(game_vars.level, game_vars.spawn_index)
             if  spawnData.time > game_vars.time
                 break
             create_enemy(spawnData.enemy,
-                        float2(float(WINDOW_WIDTH) + spawnData.x_offset * float(SCALE),
-                                float(WINDOW_HEIGHT) * spawnData.y_ratio))
+                         float2(float(WINDOW_WIDTH) + spawnData.x_offset * float(SCALE),
+                                float(WINDOW_HEIGHT) * spawnData.y_ratio),
+                         game_vars.spawn_index)
             game_vars.spawn_index++
+            enemiesSpawned++
 
-        commit()
+        if enemiesSpawned > 0
+            commit()
+
+        let playerHealth = get_player_health()
+        if playerHealth <= 0.0
+            game_vars.game_state = GameState FadeOut
+            return !gameOver
 
         let allEnemiesSpawned = (game_vars.spawn_index >= levelSpawnDataSize)
         var allEnemiesDead = true
@@ -208,6 +223,7 @@ def player_enemy_collision_es(eid: EntityId;
                  pos: float2;
                  size: float2;
                  phys: PhysObj;
+                 health: float;
                  player_idx: int)
         if player_idx == playerIdx
             return
@@ -218,9 +234,8 @@ def player_enemy_collision_es(eid: EntityId;
             enemyPos = pos
 
     if enemyEid != INVALID_ENTITY_ID
-        let toPlayer = playerPos - enemyPos
-        normalize(toPlayer)
-        phys.velocity += toPlayer * 5.0
+        let toPlayer = normalize(playerPos - enemyPos)
+        phys.velocity += toPlayer * 350.0
 
         do_damage(eid, PLAYER_COLLISION_DAMAGE, ENEMY_INDEX)
 
@@ -246,3 +261,8 @@ def update_attached_es(attached_to: EntityId;
 def update_damage_fx_timer_es(var damage_fx_timer: float)
     if damage_fx_timer > 0.0
         damage_fx_timer -= game_vars.dt
+
+
+[decs(stage=clear)]
+def clear_all_es(var eid: EntityId)
+    delete_entity(eid)

@@ -31,6 +31,6 @@ def move_dir_es(input: PlayerInput;
         if input.right
             dir.x += 1.0
 
-        normalize(dir)
+        dir = normalize(dir)
 
     move_dir = dir

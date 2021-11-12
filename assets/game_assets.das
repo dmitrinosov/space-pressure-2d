@@ -17,7 +17,16 @@ var g_game_sprites = [[GameSprite[]
     [[GameSprite id="Back01", texture_path="textures/Back01.png"]];
     [[GameSprite id="Player00", texture_path="textures/Player00.png", generate_damage_image=true]];
     [[GameSprite id="Asteroid00", texture_path="textures/Asteroid00.png", generate_damage_image=true]];
-    [[GameSprite id="Projectile00", texture_path="textures/FXSphere00.png"]]
+    [[GameSprite id="Enemy00", texture_path="textures/Enemy00.png", generate_damage_image=true]];
+    [[GameSprite id="Enemy01", texture_path="textures/Enemy01.png", generate_damage_image=true]];
+    [[GameSprite id="Enemy02", texture_path="textures/Enemy02.png", generate_damage_image=true]];
+    [[GameSprite id="Enemy03", texture_path="textures/Enemy03.png", generate_damage_image=true]];
+    [[GameSprite id="Enemy04", texture_path="textures/Enemy04.png", generate_damage_image=true]];
+    [[GameSprite id="EnemyGun00", texture_path="textures/EnemyGun00.png"]];
+    [[GameSprite id="Projectile00", texture_path="textures/FXSphere00.png"]];
+    [[GameSprite id="Projectile01", texture_path="textures/Projectile01b.png"]];
+    [[GameSprite id="Projectile02", texture_path="textures/Projectile02.png"]];
+    [[GameSprite id="Projectile03", texture_path="textures/Projectile03.png"]]
 ]]
 
 var g_game_back00_image_idx = 0

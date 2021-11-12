@@ -33,3 +33,5 @@ struct Gun
     cooldown_time: float
     cooldown_timer: float
     projectile_type: ProjectileType
+    projectile_count: int
+    attack_sector: float

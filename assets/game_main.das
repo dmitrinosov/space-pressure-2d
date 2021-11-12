@@ -16,9 +16,6 @@ require game_enemy
 require game_level
 require game_draw
 
-options debugger
-require daslib/debug
-
 
 // Runs once when game starts and every hot-reload
 [export]
@@ -29,7 +26,7 @@ def initialize
     set_antialiasing(0)
     set_vsync_enabled(false)
 
-    restart()
+    decs_stage("clear")
 
     initialize_game_vars()
     load_assets()
@@ -67,8 +64,7 @@ def draw
     draw_background()
 
     decs_stage("draw")
-    var START = 0
-    text_out(0, START, "{game_vars.dbg}", 0xffffffff)
+    // text_out(0, 0, "{game_vars.dbg}", 0xffffffff)
 
     draw_fade()
 
