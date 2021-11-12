@@ -24,7 +24,7 @@ let
     WINDOW_HEIGHT = 200 * SCALE
     FONT_SIZE = 8 * SCALE
     PLAYER_SIZE = float2(163.0, 163.0) * 0.3  * 0.5 * float(SCALE)
-    PLAYER_SPEED = 4600.0 * float(SCALE)
+    PLAYER_SPEED = 3800.0 * float(SCALE)
     PLAYER_START_POSITION_RATIO = float2(0.2, 0.5)
     PLAYER_COOLDOWN = 0.15
     PLAYER_MID_PROJECTILE_TYPE = ProjectileType PlayerProjectile00
