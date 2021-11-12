@@ -277,7 +277,7 @@ def player_enemy_collision_es(eid: EntityId;
 
     if enemyEid != INVALID_ENTITY_ID
         let toPlayer = normalize(playerPos - enemyPos)
-        phys.velocity += toPlayer * 200.0
+        phys.velocity += toPlayer * 350.0
 
         do_damage(eid, PLAYER_COLLISION_DAMAGE, ENEMY_INDEX)
 
