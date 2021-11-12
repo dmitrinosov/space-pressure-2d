@@ -15,8 +15,7 @@ def draw_image(image_idx: int; pos: float2; size: float2; angle: float)
                            0xFFFFFFFFu, size, angle, 0.5, 0.5)
 
 
-[decs (stage=draw)]
-def draw_background_es(pos: float2; size: float2)
+def draw_background()
     let backsCount = 4
     let backHeight = float(WINDOW_HEIGHT)
     let backSize = float2(backHeight, backHeight)
@@ -27,6 +26,11 @@ def draw_background_es(pos: float2; size: float2)
                            float(WINDOW_WIDTH))
         let backImageIdx = (i % 2 == 0) ? g_game_back00_image_idx : g_game_back01_image_idx
         draw_image(backImageIdx, float2(backOffset00, 0.0) + backSize * 0.5, backSize, 0.0)
+
+
+def draw_fade()
+    if game_vars.fade_progress > 0.0
+        fill_rect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, make_color(0.0, 0.0, 0.0, game_vars.fade_progress))
 
 
 [decs (stage=update)]

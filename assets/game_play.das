@@ -10,12 +10,12 @@ require game_phys
 require game_assets
 require game_utils
 require game_enemy
+require game_level
 
 
-def game_start()
-
+def create_player()
     // Player
-    let playerPos = float2(WINDOW_WIDTH, WINDOW_HEIGHT) * PLAYER_START_POSITION_RATIO
+    let playerPos = float2(-WINDOW_WIDTH, WINDOW_HEIGHT) * PLAYER_START_POSITION_RATIO
     var playerEid = create_entity <| @(eid, cmp)
         cmp |> set("pos", playerPos)
         cmp |> set("size", PLAYER_SIZE)
@@ -43,6 +43,7 @@ def game_start()
         cmp |> set("attached_to", playerEid)
         cmp |> set("player_idx", PLAYER_INDEX)
         cmp |> set("damage", PLAYER_DAMAGE)
+        cmp |> set("active", false)
         apply_decs_template(
             cmp,
              [[Gun
@@ -58,30 +59,118 @@ def game_start()
         cmp |> set("attached_to", playerEid)
         cmp |> set("player_idx", PLAYER_INDEX)
         cmp |> set("damage", PLAYER_DAMAGE)
+        cmp |> set("active", false)
         apply_decs_template(
             cmp,
              [[Gun
                 cooldown_time=PLAYER_COOLDOWN,
                 projectile_type=PLAYER_START_PROJECTILE_TYPE]])
 
-    // Asteroid
-    create_enemy(EnemyType AsteroidSmall00, float2(float(WINDOW_WIDTH) * 0.7, float(WINDOW_HEIGHT) * 0.3))
-    create_enemy(EnemyType AsteroidBig00, float2(float(WINDOW_WIDTH) * 0.8, float(WINDOW_HEIGHT) * 0.4))
-    create_enemy(EnemyType AsteroidMedium00, float2(float(WINDOW_WIDTH) * 0.5, float(WINDOW_HEIGHT) * 0.5))
-    create_enemy(EnemyType AsteroidSmall00, float2(float(WINDOW_WIDTH) * 0.6, float(WINDOW_HEIGHT) * 0.6))
 
-    create_enemy(EnemyType AsteroidSmall00, float2(float(WINDOW_WIDTH) * 1.2, float(WINDOW_HEIGHT) * 0.3))
-    create_enemy(EnemyType AsteroidBig00, float2(float(WINDOW_WIDTH) * 1.3, float(WINDOW_HEIGHT) * 0.4))
-    create_enemy(EnemyType AsteroidMedium00, float2(float(WINDOW_WIDTH) * 1.4, float(WINDOW_HEIGHT) * 0.5))
-    create_enemy(EnemyType AsteroidSmall00, float2(float(WINDOW_WIDTH) * 1.5, float(WINDOW_HEIGHT) * 0.6))
+def set_player_pos(pos: float2)
+    find_query() <| $(eid: EntityId;
+                      input: PlayerInput;
+                  var phys: PhysObj)
+        phys.prev_pos = pos
+        phys.pos = pos
 
-    return
+def get_player_pos()
+    var result = float2()
+    find_query() <| $(eid: EntityId;
+                      input: PlayerInput;
+                  var phys: PhysObj)
+        result = phys.pos
+    return result
+
+def activate_player_guns(value: bool)
+    find_query() <| $(eid: EntityId;
+                      input: PlayerInput)
+        query() <| $(attached_to: EntityId;
+                 var active: bool)
+            if attached_to == eid
+                active = value
+
+def game_start()
+    create_player()
+
+    game_vars.game_state = GameState FadeIn
+    game_vars.fade_progress = 1.0
+
+
+def game_update(dt: float)
+
+    var gameOver = false
+
+    if game_vars.game_state == GameState FadeIn
+        game_vars.fade_progress -= dt * 1.35
+        if game_vars.fade_progress <= 0.0
+            game_vars.fade_progress = 0.0
+            game_vars.game_state = GameState FlyIn
+    elif game_vars.game_state == GameState FlyIn
+        game_vars.fly_progress += dt * 1.0
+        let p = saturate(game_vars.fly_progress)
+        let pp = p * p * (3.0 - 2.0 * p)
+        let playerPos = float2(lerp(-200.0f * float(SCALE), float(WINDOW_WIDTH) * PLAYER_START_POSITION_RATIO.x, pp),
+                               float(WINDOW_HEIGHT) * PLAYER_START_POSITION_RATIO.y)
+        set_player_pos(playerPos)
+        if game_vars.fly_progress >= 1.0
+            game_vars.fly_progress = 1.0
+            game_vars.game_state = GameState Game
+            activate_player_guns(true)
+    elif game_vars.game_state == GameState Game
+        let levelSpawnDataSize = get_level_spawn_data_size(game_vars.level)
+        while game_vars.spawn_index < levelSpawnDataSize
+            let spawnData = get_level_spawn_data(game_vars.level, game_vars.spawn_index)
+            if  spawnData.time > game_vars.time
+                break
+            create_enemy(spawnData.enemy,
+                        float2(float(WINDOW_WIDTH) + spawnData.x_offset * float(SCALE),
+                                float(WINDOW_HEIGHT) * spawnData.y_ratio))
+            game_vars.spawn_index++
+
+        commit()
+
+        let allEnemiesSpawned = (game_vars.spawn_index >= levelSpawnDataSize)
+        var allEnemiesDead = true
+        query() <| $(player_idx: int;
+                        health: float)
+            if player_idx != ENEMY_INDEX
+                return
+            if health > 0.0
+                allEnemiesDead = false
+
+        if allEnemiesSpawned && allEnemiesDead
+            game_vars.game_state = GameState FlyOut
+            game_vars.fly_x = get_player_pos().x
+            activate_player_guns(false)
+    elif game_vars.game_state == GameState FlyOut
+        game_vars.fly_progress -= dt * 0.75
+        let p = 1.0 - saturate(game_vars.fly_progress)
+        let pp = p * p * (3.0 - 2.0 * p)
+        let playerPos = float2(lerp(game_vars.fly_x, (float(WINDOW_WIDTH) + 400.0* float(SCALE)), pp),
+                               get_player_pos().y)
+        set_player_pos(playerPos)
+        if game_vars.fly_progress <= 0.0
+            game_vars.fly_progress = 0.0
+            game_vars.game_state = GameState FadeOut
+    elif game_vars.game_state == GameState FadeOut
+        game_vars.fade_progress += dt * 1.35
+        if game_vars.fade_progress >= 1.0
+            game_vars.fade_progress = 1.0
+            game_vars.game_state = GameState GameOver
+    elif game_vars.game_state == GameState GameOver
+        gameOver = true
+
+    return !gameOver
 
 
 [decs (stage=phys_post_update_play)]
 def player_game_bounds_es(var phys: PhysObj;
                           size: float2;
                           input: PlayerInput)
+    if game_vars.game_state != GameState Game
+        return
+
     let halfSize = size * 0.5
     if phys.pos.x - halfSize.x < 0.0
         phys.pos.x = halfSize.x

@@ -69,6 +69,8 @@ def load_assets()
     set_font_name("fonts/ARCADECLASSIC.TTF")
     set_font_size(FONT_SIZE)
 
+    g_images |> clear()
+
     for gameSprite in g_game_sprites
         gameSprite.image_idx = load_image(gameSprite.texture_path)
         if gameSprite.generate_damage_image

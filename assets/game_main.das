@@ -13,6 +13,7 @@ require game_play
 require game_gun
 require game_projectile
 require game_enemy
+require game_level
 require game_draw
 
 options debugger
@@ -44,7 +45,14 @@ def act(var dt: float)
     game_vars.dbg = 0.0
 
     decs_stage("input")
+
     update_phys_world(dt)
+
+    let restart = !game_update(dt)
+    if restart
+        initialize()
+        return
+
     decs_stage("update")
     decs_stage("update_play")
     decs_stage("update_gun")
@@ -55,9 +63,14 @@ def act(var dt: float)
 [export]
 def draw
     enable_alpha_blend()
+
+    draw_background()
+
     decs_stage("draw")
     var START = 0
     text_out(0, START, "{game_vars.dbg}", 0xffffffff)
+
+    draw_fade()
 
 
 

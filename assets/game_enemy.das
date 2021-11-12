@@ -72,3 +72,15 @@ def create_enemy(enemy_type: EnemyType;
                     prev_pos=pos]])
 
     return INVALID_ENTITY_ID
+
+
+[decs (stage=update)]
+def enemy_borders_es(eid: EntityId;
+                     pos: float2;
+                     size: float2;
+                     player_idx: int)
+    if player_idx != ENEMY_INDEX
+        return
+
+    if (pos.x + size.x * 0.5) < 0.0
+        delete_entity(eid)

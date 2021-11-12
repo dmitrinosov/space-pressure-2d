@@ -5,6 +5,7 @@ require daslib/math
 
 require game_config
 require game_templates
+require game_var
 require game_phys
 
 [decs (stage=input)]
@@ -20,15 +21,16 @@ def move_dir_es(input: PlayerInput;
             var move_dir: float2)
     var dir = float2()
 
-    if input.up
-        dir.y -= 1.0
-    if input.down
-        dir.y += 1.0
-    if input.left
-        dir.x -= 1.0
-    if input.right
-        dir.x += 1.0
+    if game_vars.game_state == GameState Game
+        if input.up
+            dir.y -= 1.0
+        if input.down
+            dir.y += 1.0
+        if input.left
+            dir.x -= 1.0
+        if input.right
+            dir.x += 1.0
 
-    normalize(dir)
+        normalize(dir)
 
     move_dir = dir

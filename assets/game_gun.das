@@ -9,17 +9,23 @@ require game_projectile
 
 
 [decs (stage=update_gun)]
-def gun_fire_es(var gun: Gun;
+def gun_fire_es(eid: EntityId;
                 pos: float2;
                 dir: float2;
+                active: bool;
                 player_idx: int;
                 damage: float;
-                attached_to: EntityId)
+                attached_to: EntityId;
+            var gun: Gun)
     var isOwnerAlive = false
     query(attached_to) <| $(health: float)
         isOwnerAlive = health > 0.0
 
     if !isOwnerAlive
+        delete_entity(eid)
+        return
+
+    if !active
         return
 
     let dt = game_vars.dt
